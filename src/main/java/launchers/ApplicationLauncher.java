@@ -4,7 +4,7 @@ import configurations.Configuration;
 import configurations.TaskConfiguration;
 import solutions.MySQLSolution;
 
-public class MySQLLauncher {
+public class ApplicationLauncher {
 
 	public static void main(String[] args) {
 		Configuration c = new TaskConfiguration();
