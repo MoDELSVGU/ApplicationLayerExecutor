@@ -3,11 +3,12 @@ package configurations;
 import java.util.Map;
 
 public class TaskConfiguration extends DatabaseConfiguration {
-	private String sScenario, sTask, sCaller;
+	private String sScenario, sTask, sCaller, sRole;
 
 	private static final String ENV_TASK = "TASK";
 	private static final String ENV_SCENARIO = "SCENARIO";
 	private static final String ENV_CALLER = "CALLER";
+	private static final String ENV_ROLE = "ROLE";
 
 	public String getsScenario() {
 		return sScenario;
@@ -43,6 +44,11 @@ public class TaskConfiguration extends DatabaseConfiguration {
 		if (sCaller != null) {
 			setsCaller(sCaller);
 		}
+		
+		final String sRole = env.get(ENV_ROLE);
+		if (sRole != null) {
+			setsRole(sRole);
+		}
 
 	}
 
@@ -52,6 +58,14 @@ public class TaskConfiguration extends DatabaseConfiguration {
 
 	public void setsCaller(String sCaller) {
 		this.sCaller = sCaller;
+	}
+
+	public String getsRole() {
+		return sRole;
+	}
+
+	public void setsRole(String sRole) {
+		this.sRole = sRole;
 	}
 
 }

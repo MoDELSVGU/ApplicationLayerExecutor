@@ -32,7 +32,7 @@ public class MySQLSolution extends Solution {
 
 			else if (tc.getsTask() == "5") {
 				final long nanosExecutionStart = System.nanoTime();
-				runQuery4(tc);
+				runQuery5(tc);
 				final long nanosExecutionEnd = System.nanoTime();
 				final double timeInSecs = ((double) nanosExecutionEnd - nanosExecutionStart) / 1_000_000_000;
 				printMetric(tc, METRIC_EXECUTION_TIME, timeInSecs);
@@ -40,7 +40,7 @@ public class MySQLSolution extends Solution {
 
 			else if (tc.getsTask() == "6") {
 				final long nanosExecutionStart = System.nanoTime();
-				runQuery4(tc);
+				runQuery6(tc);
 				final long nanosExecutionEnd = System.nanoTime();
 				final double timeInSecs = ((double) nanosExecutionEnd - nanosExecutionStart) / 1_000_000_000;
 				printMetric(tc, METRIC_EXECUTION_TIME, timeInSecs);
@@ -63,46 +63,116 @@ public class MySQLSolution extends Solution {
 		}
 	}
 
+	private void runQuery6(TaskConfiguration tc) {
+		final String query6 = "SELECT age FROM Student JOIN (SELECT * FROM Enrollment WHERE lecturers = ?) AS my_employments ON my_employments.students = Student_id";
+		Connection conn = MySQLConnection.getConnection(tc.getsScenario(), tc.getDbusername(), tc.getDbpassword());
+
+		try {
+			if (tc.getsRole() == "Lecturer") {
+				throw new UnauthorizedAccessException("Unauthorized Access!");
+			}
+		} catch (UnauthorizedAccessException e) {
+			e.printStackTrace();
+		}
+
+		PreparedStatement st2;
+		try {
+			st2 = conn.prepareStatement(query6);
+			st2.setString(0, tc.getsCaller());
+
+			ResultSet rs = st2.executeQuery();
+
+			while (rs.next()) {
+				rs.getInt(0);
+			}
+
+			st2.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	private void runQuery5(TaskConfiguration tc) {
+		final String query5 = "SELECT COUNT(*) FROM Enrollment";
+		final String authCheck = "SELECT (SELECT COUNT(*) FROM Student) = (SELECT COUNT(*) FROM Enrollment WHERE lecturers = ?) as res";
+		Connection conn = MySQLConnection.getConnection(tc.getsScenario(), tc.getDbusername(), tc.getDbpassword());
+		PreparedStatement st;
+
+		try {
+			st = conn.prepareStatement(authCheck);
+			st.setString(0, tc.getsCaller());
+
+			ResultSet rs = st.executeQuery();
+
+			while (rs.next()) {
+				boolean res = rs.getBoolean("res");
+				if (!res && tc.getsRole() == "Lecturer") {
+					throw new UnauthorizedAccessException("Unauthorized Access!");
+				}
+			}
+
+			st.close();
+		} catch (SQLException | UnauthorizedAccessException e) {
+			e.printStackTrace();
+		}
+
+		Statement st2;
+		try {
+			st2 = conn.createStatement();
+
+			ResultSet rs = st2.executeQuery(query5);
+
+			while (rs.next()) {
+				rs.getInt(0);
+			}
+
+			st2.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+	}
+	
 	private void runQuery4(TaskConfiguration tc) {
 		final String query4 = "SELECT COUNT(*) FROM Student WHERE age > 18";
 		final String authCheck = "SELECT (SELECT MAX(age) FROM Lecturer) = (SELECT age FROM Lecturer WHERE Lecturer_id = ?) as res";
 		Connection conn = MySQLConnection.getConnection(tc.getsScenario(), tc.getDbusername(), tc.getDbpassword());
 		PreparedStatement st;
-		List<Student> students = new ArrayList<Student>();
-		
+
 		try {
 			st = conn.prepareStatement(authCheck);
 			st.setString(0, tc.getsCaller());
-			
+
 			ResultSet rs = st.executeQuery();
 
 			while (rs.next()) {
 				boolean res = rs.getBoolean("res");
-				if (!res) {
+				if (!res && tc.getsRole() == "Lecturer") {
 					throw new UnauthorizedAccessException("Unauthorized Access!");
 				}
 			}
-			
+
 			st.close();
 		} catch (SQLException | UnauthorizedAccessException e) {
 			e.printStackTrace();
 		}
-		
+
 		Statement st2;
 		try {
 			st2 = conn.createStatement();
-			
+
 			ResultSet rs = st2.executeQuery(query4);
 
 			while (rs.next()) {
-				int total = rs.getInt(0);
+				rs.getInt(0);
 			}
-			
+
 			st2.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	private void printMetric(Configuration c, String metricExecutionTime, Object metricValue) {
