@@ -68,7 +68,7 @@ public class MySQLSolution extends Solution {
 		Connection conn = MySQLConnection.getConnection(tc.getsScenario(), tc.getDbusername(), tc.getDbpassword());
 
 		try {
-			if (tc.getsRole().equals("Lecturer")) {
+			if (!tc.getsRole().equals("Lecturer")) {
 				throw new UnauthorizedAccessException("Unauthorized Access!");
 			}
 		} catch (UnauthorizedAccessException e) {
@@ -107,7 +107,7 @@ public class MySQLSolution extends Solution {
 
 			while (rs.next()) {
 				boolean res = rs.getBoolean("res");
-				if (!res && tc.getsRole().equals("Lecturer")) {
+				if (!res || !tc.getsRole().equals("Lecturer")) {
 					throw new UnauthorizedAccessException("Unauthorized Access!");
 				}
 			}
@@ -148,7 +148,7 @@ public class MySQLSolution extends Solution {
 
 			while (rs.next()) {
 				boolean res = rs.getBoolean("res");
-				if (!res && tc.getsRole().equals("Lecturer")) {
+				if (!res || !tc.getsRole().equals("Lecturer")) {
 					throw new UnauthorizedAccessException("Unauthorized Access!");
 				}
 			}
