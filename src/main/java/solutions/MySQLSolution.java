@@ -64,7 +64,7 @@ public class MySQLSolution extends Solution {
 	}
 
 	private void runQuery6(TaskConfiguration tc) {
-		final String query6 = "SELECT age FROM Student JOIN (SELECT * FROM Enrollment WHERE lecturers = ?) AS my_employments ON my_employments.students = Student_id";
+		final String query6 = "SELECT age AS res FROM Student JOIN (SELECT * FROM Enrollment WHERE lecturers = ?) AS my_employments ON my_employments.students = Student_id";
 		Connection conn = MySQLConnection.getConnection(tc.getsScenario(), tc.getDbusername(), tc.getDbpassword());
 
 		try {
@@ -83,7 +83,7 @@ public class MySQLSolution extends Solution {
 			ResultSet rs = st2.executeQuery();
 
 			while (rs.next()) {
-				rs.getInt(0);
+				rs.getInt("res");
 			}
 
 			st2.close();
@@ -94,7 +94,7 @@ public class MySQLSolution extends Solution {
 	}
 
 	private void runQuery5(TaskConfiguration tc) {
-		final String query5 = "SELECT COUNT(*) FROM Enrollment";
+		final String query5 = "SELECT COUNT(*) AS res FROM Enrollment";
 		final String authCheck = "SELECT (SELECT COUNT(*) FROM Student) = (SELECT COUNT(*) FROM Enrollment WHERE lecturers = ?) as res";
 		Connection conn = MySQLConnection.getConnection(tc.getsScenario(), tc.getDbusername(), tc.getDbpassword());
 		PreparedStatement st;
@@ -124,7 +124,7 @@ public class MySQLSolution extends Solution {
 			ResultSet rs = st2.executeQuery(query5);
 
 			while (rs.next()) {
-				rs.getInt(0);
+				rs.getInt("res");
 			}
 
 			st2.close();
@@ -135,7 +135,7 @@ public class MySQLSolution extends Solution {
 	}
 	
 	private void runQuery4(TaskConfiguration tc) {
-		final String query4 = "SELECT COUNT(*) FROM Student WHERE age > 18";
+		final String query4 = "SELECT COUNT(*) AS res FROM Student WHERE age > 18";
 		final String authCheck = "SELECT (SELECT MAX(age) FROM Lecturer) = (SELECT age FROM Lecturer WHERE Lecturer_id = ?) as res";
 		Connection conn = MySQLConnection.getConnection(tc.getsScenario(), tc.getDbusername(), tc.getDbpassword());
 		PreparedStatement st;
@@ -165,7 +165,7 @@ public class MySQLSolution extends Solution {
 			ResultSet rs = st2.executeQuery(query4);
 
 			while (rs.next()) {
-				rs.getInt(0);
+				rs.getInt("res");
 			}
 
 			st2.close();
