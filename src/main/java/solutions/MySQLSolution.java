@@ -78,7 +78,7 @@ public class MySQLSolution extends Solution {
 		PreparedStatement st2;
 		try {
 			st2 = conn.prepareStatement(query6);
-			st2.setString(0, tc.getsCaller());
+			st2.setString(1, tc.getsCaller());
 
 			ResultSet rs = st2.executeQuery();
 
