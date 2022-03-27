@@ -22,7 +22,7 @@ public class MySQLSolution extends Solution {
 	public void run(Configuration c) {
 		if (c instanceof TaskConfiguration) {
 			TaskConfiguration tc = (TaskConfiguration) c;
-			if (tc.getsTask() == "4") {
+			if (tc.getsTask().equals("4")) {
 				final long nanosExecutionStart = System.nanoTime();
 				runQuery4(tc);
 				final long nanosExecutionEnd = System.nanoTime();
@@ -30,7 +30,7 @@ public class MySQLSolution extends Solution {
 				printMetric(tc, METRIC_EXECUTION_TIME, timeInSecs);
 			}
 
-			else if (tc.getsTask() == "5") {
+			else if (tc.getsTask().equals("5")) {
 				final long nanosExecutionStart = System.nanoTime();
 				runQuery5(tc);
 				final long nanosExecutionEnd = System.nanoTime();
@@ -38,7 +38,7 @@ public class MySQLSolution extends Solution {
 				printMetric(tc, METRIC_EXECUTION_TIME, timeInSecs);
 			}
 
-			else if (tc.getsTask() == "6") {
+			else if (tc.getsTask().equals("6")) {
 				final long nanosExecutionStart = System.nanoTime();
 				runQuery6(tc);
 				final long nanosExecutionEnd = System.nanoTime();
@@ -68,7 +68,7 @@ public class MySQLSolution extends Solution {
 		Connection conn = MySQLConnection.getConnection(tc.getsScenario(), tc.getDbusername(), tc.getDbpassword());
 
 		try {
-			if (tc.getsRole() == "Lecturer") {
+			if (tc.getsRole().equals("Lecturer")) {
 				throw new UnauthorizedAccessException("Unauthorized Access!");
 			}
 		} catch (UnauthorizedAccessException e) {
@@ -101,13 +101,13 @@ public class MySQLSolution extends Solution {
 
 		try {
 			st = conn.prepareStatement(authCheck);
-			st.setString(0, tc.getsCaller());
+			st.setString(1, tc.getsCaller());
 
 			ResultSet rs = st.executeQuery();
 
 			while (rs.next()) {
 				boolean res = rs.getBoolean("res");
-				if (!res && tc.getsRole() == "Lecturer") {
+				if (!res && tc.getsRole().equals("Lecturer")) {
 					throw new UnauthorizedAccessException("Unauthorized Access!");
 				}
 			}
@@ -142,13 +142,13 @@ public class MySQLSolution extends Solution {
 
 		try {
 			st = conn.prepareStatement(authCheck);
-			st.setString(0, tc.getsCaller());
+			st.setString(1, tc.getsCaller());
 
 			ResultSet rs = st.executeQuery();
 
 			while (rs.next()) {
 				boolean res = rs.getBoolean("res");
-				if (!res && tc.getsRole() == "Lecturer") {
+				if (!res && tc.getsRole().equals("Lecturer")) {
 					throw new UnauthorizedAccessException("Unauthorized Access!");
 				}
 			}
@@ -181,7 +181,6 @@ public class MySQLSolution extends Solution {
 
 			System.out.println(String.format("%s;%s;%s;%s;%s", tc.getsTool(), tc.getsTask(), tc.getRunIndex(),
 					metricExecutionTime, metricValue.toString()));
-
 		}
 
 	}
