@@ -179,7 +179,7 @@ public class MySQLSolution extends Solution {
 		if (c instanceof TaskConfiguration) {
 			TaskConfiguration tc = (TaskConfiguration) c;
 
-			System.out.println(String.format("%s;%s;%s;%s;%s", tc.getsTool(), tc.getsTask(), tc.getRunIndex(),
+			System.out.println(String.format("%s;%s;%s;%s;%s;%s", tc.getsTool(), tc.getsScenario(), tc.getsTask(), tc.getRunIndex(),
 					metricExecutionTime, metricValue.toString()));
 		}
 
