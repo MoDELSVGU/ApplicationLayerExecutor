@@ -5,14 +5,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
 
 import configurations.Configuration;
 import configurations.TaskConfiguration;
 import connections.MySQLConnection;
 import exceptions.UnauthorizedAccessException;
-import models.Student;
 
 public class MySQLSolution extends Solution {
 
@@ -81,11 +78,11 @@ public class MySQLSolution extends Solution {
 			st2.setString(1, tc.getsCaller());
 
 			ResultSet rs = st2.executeQuery();
-
+			
 			while (rs.next()) {
 				rs.getInt("res");
 			}
-
+			
 			st2.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -104,14 +101,16 @@ public class MySQLSolution extends Solution {
 			st.setString(1, tc.getsCaller());
 
 			ResultSet rs = st.executeQuery();
+			
+			Boolean res = null;
 
 			while (rs.next()) {
-				boolean res = rs.getBoolean("res");
+				res = rs.getBoolean("res");
 				if (!res || !tc.getsRole().equals("Lecturer")) {
 					throw new UnauthorizedAccessException("Unauthorized Access!");
 				}
 			}
-
+			
 			st.close();
 		} catch (SQLException | UnauthorizedAccessException e) {
 			e.printStackTrace();
@@ -126,6 +125,8 @@ public class MySQLSolution extends Solution {
 			while (rs.next()) {
 				rs.getInt("res");
 			}
+			
+			
 
 			st2.close();
 		} catch (SQLException e) {
@@ -145,14 +146,16 @@ public class MySQLSolution extends Solution {
 			st.setString(1, tc.getsCaller());
 
 			ResultSet rs = st.executeQuery();
+			
+			Boolean res = null;
 
 			while (rs.next()) {
-				boolean res = rs.getBoolean("res");
+				res = rs.getBoolean("res");
 				if (!res || !tc.getsRole().equals("Lecturer")) {
 					throw new UnauthorizedAccessException("Unauthorized Access!");
 				}
 			}
-
+			
 			st.close();
 		} catch (SQLException | UnauthorizedAccessException e) {
 			e.printStackTrace();
